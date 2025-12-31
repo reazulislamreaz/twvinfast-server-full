@@ -1,0 +1,479 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  users       User[]
+}
+
+model User {
+  id                  Int                     @id @default(autoincrement())
+  email               String                  @unique
+  name                String
+  refreshToken        String?
+  business_id         Int?
+  created_at          DateTime                @default(now())
+  last_login_at       DateTime?
+  password_hash       String
+  role_id             Int
+  updated_at          DateTime                @updatedAt
+  status              String?                 @default("ACTIVE")
+  email_signature     String?
+  phone               String?
+  twoFAEnabled        Boolean                 @default(false)
+  twoFASecret         String?
+  location            String?                 @default("Canada")
+  aiActions           AIAction[]
+  aiReplies           AiGeneratedReply[]
+  hallucinations      AiHallucinationReport[]
+  emails              Email[]
+  mailboxes           Mailbox[]
+  notificationSetting NotificationSetting?
+  business            Business?               @relation(fields: [business_id], references: [id])
+  role                Role                    @relation(fields: [role_id], references: [id])
+  aiTrainingDocuments AiTrainingDocument[]
+
+}
+
+model NotificationSetting {
+  id                  Int      @id @default(autoincrement())
+  user_id             Int      @unique
+  email_alert_enabled Boolean  @default(true)
+  login_alert_enabled Boolean  @default(true)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  user                User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model SecuritySetting {
+  id             Int      @id @default(1)
+  force2FAForAll Boolean  @default(false)
+  updatedAt      DateTime @updatedAt
+}
+
+model Mailbox {
+  id            Int           @id @default(autoincrement())
+  business_id   Int
+  user_id       Int
+  provider      String
+  email_address String
+  imap_host     String?
+  smtp_host     String?
+  smtp_port     Int?
+  is_ssl        Boolean?      @default(true)
+  created_at    DateTime      @default(now())
+  imap_password String?
+  smtp_password String?
+  imap_port     Int?
+  emails        Email[]
+  threads       EmailThread[]
+  business      Business      @relation(fields: [business_id], references: [id])
+  user          User          @relation(fields: [user_id], references: [id])
+  labels        ThreadLabel[]
+}
+
+model EmailThread {
+  id                Int                @id @default(autoincrement())
+  business_id       Int
+  mailbox_id        Int
+  customer_id       Int?
+  subject           String
+  last_message_at   DateTime
+  created_at        DateTime           @default(now())
+  updated_at        DateTime           @updatedAt
+  is_archived       Boolean            @default(false)
+  last_message_id   String?
+  references        String?
+  status            ThreadStatus       @default(NEW)
+  deleted_at        DateTime?
+  is_deleted        Boolean            @default(false)
+  is_starred        Boolean            @default(false)
+  opportunity_stage OpportunityStage?
+  is_read           Boolean            @default(false)
+  emails            Email[]
+  business          Business           @relation(fields: [business_id], references: [id])
+  customer          Customer?          @relation(fields: [customer_id], references: [id])
+  mailbox           Mailbox            @relation(fields: [mailbox_id], references: [id])
+  labels            EmailThreadLabel[]
+
+  @@index([mailbox_id, is_archived, is_deleted])
+}
+
+model Email {
+  id             Int                     @id @default(autoincrement())
+  business_id    Int
+  thread_id      Int?
+  mailbox_id     Int
+  user_id        Int?
+  in_reply_to    String?
+  from_address   String?
+  to_addresses   Json?
+  cc_addresses   Json?
+  bcc_addresses  Json?
+  subject        String
+  body_text      String?
+  folder         EmailFolder?
+  is_read        Boolean                 @default(false)
+  imap_uid       Int?
+  direction      EmailDirection?
+  message_id     String?
+  references     String?
+  received_at    DateTime?
+  sent_at        DateTime?
+  created_at     DateTime                @default(now())
+  aiActions      AIAction[]
+  insight        AIEmailInsight?
+  aiReplies      AiGeneratedReply[]
+  hallucinations AiHallucinationReport[]
+  business       Business                @relation(fields: [business_id], references: [id])
+  mailbox        Mailbox                 @relation(fields: [mailbox_id], references: [id])
+  thread         EmailThread?            @relation(fields: [thread_id], references: [id])
+  user           User?                   @relation(fields: [user_id], references: [id])
+  attachments    EmailAttachment[]
+
+  @@unique([mailbox_id, imap_uid])
+  @@index([thread_id])
+}
+
+model EmailAttachment {
+  id         Int      @id @default(autoincrement())
+  email_id   Int
+  file_name  String
+  file_path  String
+  mime_type  String
+  file_size  Int?
+  created_at DateTime @default(now())
+  email      Email    @relation(fields: [email_id], references: [id], onDelete: Cascade)
+
+  @@index([email_id])
+}
+
+model ThreadLabel {
+  id         Int                @id @default(autoincrement())
+  mailbox_id Int
+  name       String
+  created_at DateTime           @default(now())
+  threads    EmailThreadLabel[]
+  mailbox    Mailbox            @relation(fields: [mailbox_id], references: [id])
+
+  @@unique([mailbox_id, name])
+}
+
+model EmailThreadLabel {
+  thread_id Int
+  label_id  Int
+  label     ThreadLabel @relation(fields: [label_id], references: [id], onDelete: Cascade)
+  thread    EmailThread @relation(fields: [thread_id], references: [id], onDelete: Cascade)
+
+  @@id([thread_id, label_id])
+}
+
+model Customer {
+  id                 Int           @id @default(autoincrement())
+  business_id        Int
+  name               String
+  email              String?
+  phone              String?
+  status             String?
+  lead_score         Int?
+  value_estimate     Float?
+  last_contact_at    DateTime?
+  company            String?
+  created_at         DateTime      @default(now())
+  notes              String?
+  preferred_language String?
+  source             String?
+  tags               Json?
+  updated_at         DateTime      @updatedAt
+  business           Business      @relation(fields: [business_id], references: [id])
+  threads            EmailThread[]
+  opportunities      Opportunity[]
+
+  @@unique([business_id, email], name: "business_email_unique")
+  @@index([business_id])
+  @@index([email])
+}
+
+model Opportunity {
+  id           Int              @id @default(autoincrement())
+  business_id  Int
+  customer_id  Int
+  name         String
+  stage        OpportunityStage
+  value_amount Float?
+  status       String?
+  created_at   DateTime         @default(now())
+  business     Business         @relation(fields: [business_id], references: [id])
+  customer     Customer         @relation(fields: [customer_id], references: [id])
+}
+
+model AIEmailInsight {
+  id                Int      @id @default(autoincrement())
+  email_id          Int      @unique
+  summary           String?
+  suggested_actions String?
+  created_at        DateTime @default(now())
+  email             Email    @relation(fields: [email_id], references: [id])
+}
+
+model AIAction {
+  id          Int          @id @default(autoincrement())
+  email_id    Int
+  user_id     Int?
+  action_type AIActionType
+  created_at  DateTime     @default(now())
+  email       Email        @relation(fields: [email_id], references: [id])
+  user        User?        @relation(fields: [user_id], references: [id])
+}
+
+model AiGeneratedReply {
+  id             Int                     @id @default(autoincrement())
+  email_id       Int
+  user_id        Int?
+  business_id    Int
+  content        String
+  tone           String?
+  model          String?
+  confidence     Float?
+  status         String?                 @default("SUGGESTED")
+  created_at     DateTime                @default(now())
+  business       Business                @relation(fields: [business_id], references: [id])
+  email          Email                   @relation(fields: [email_id], references: [id])
+  user           User?                   @relation(fields: [user_id], references: [id])
+  hallucinations AiHallucinationReport[]
+}
+
+model AiTrainingData {
+  id          Int          @id @default(autoincrement())
+  business_id Int
+  type        TrainingType
+  content     String?
+  file_url    String?
+  tags        Json?
+  approved_by Int?
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+  business    Business     @relation(fields: [business_id], references: [id])
+}
+
+model AiHallucinationReport {
+  id          Int                   @id @default(autoincrement())
+  email_id    Int
+  reply_id    Int?
+  user_id     Int
+  business_id Int
+  issue_type  String
+  comment     String?
+  severity    HallucinationSeverity @default(MEDIUM)
+  status      HallucinationStatus   @default(OPEN)
+  created_at  DateTime              @default(now())
+  fixed_at    DateTime?
+  business    Business              @relation(fields: [business_id], references: [id])
+  email       Email                 @relation(fields: [email_id], references: [id])
+  reply       AiGeneratedReply?     @relation(fields: [reply_id], references: [id])
+  user        User                  @relation(fields: [user_id], references: [id])
+}
+
+model AiModelSettings {
+  id             Int      @id @default(autoincrement())
+  model_name     String
+  temperature    Float?   @default(0.7)
+  max_tokens     Int?     @default(2048)
+  system_prompt  String?
+  safety_rules   Json?
+  fallback_model String?
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+}
+
+model Integration {
+  id                Int             @id @default(autoincrement())
+  business_id       Int
+  type              IntegrationType
+  config_json       Json?
+  last_sync_at      DateTime?
+  auto_sync_enabled Boolean         @default(false)
+  business          Business        @relation(fields: [business_id], references: [id])
+}
+
+model Business {
+  id                 Int                     @id @default(autoincrement())
+  name               String
+  website            String?
+  status             String?                 @default("ACTIVE")
+  created_at         DateTime                @default(now())
+  updated_at         DateTime                @updatedAt
+  email              String?
+  stripe_customer_id String?
+  description        String?
+  phone              String?
+  logo_url           String?
+  aiReplies          AiGeneratedReply[]
+  hallucinations     AiHallucinationReport[]
+  aiTraining         AiTrainingData[]
+  customers          Customer[]
+  emails             Email[]
+  threads            EmailThread[]
+  integrations       Integration[]
+  mailboxes          Mailbox[]
+  opportunities      Opportunity[]
+  payments           PaymentHistory[]
+  subscriptions      Subscription[]
+  users              User[]
+
+  // 
+   aiDocuments AiTrainingDocument[]
+}
+
+model Plan {
+  id                Int              @id @default(autoincrement())
+  name              String
+  price             Float
+  email_limit       Int?
+  features          Json?
+  is_active         Boolean          @default(true)
+  stripe_price_id   String?
+  currency          String           @default("usd")
+  description       String?
+  interval          String           @default("month")
+  stripe_product_id String?
+  user_limit        Int?
+  ai_credits        Int?
+  payments          PaymentHistory[]
+  subscriptions     Subscription[]
+}
+
+model Subscription {
+  id                     Int              @id @default(autoincrement())
+  business_id            Int
+  plan_id                Int
+  status                 String           @default("ACTIVE")
+  start_date             DateTime?
+  end_date               DateTime?
+  renewal_date           DateTime?
+  stripe_customer_id     String?
+  stripe_subscription_id String?
+  created_at             DateTime         @default(now())
+  updated_at             DateTime         @updatedAt
+  payments               PaymentHistory[]
+  business               Business         @relation(fields: [business_id], references: [id])
+  plan                   Plan             @relation(fields: [plan_id], references: [id])
+
+  @@unique([business_id, plan_id], name: "business_id_plan_id")
+  @@index([business_id])
+  @@index([plan_id])
+}
+
+model PaymentHistory {
+  id                       Int           @id @default(autoincrement())
+  business_id              Int
+  plan_id                  Int
+  subscription_id          Int?
+  amount                   Float
+  currency                 String
+  payment_method           String
+  invoice_url              String?
+  status                   String
+  created_at               DateTime      @default(now())
+  stripe_invoice_id        String?       @unique
+  stripe_payment_intent_id String?
+  business                 Business      @relation(fields: [business_id], references: [id])
+  plan                     Plan          @relation(fields: [plan_id], references: [id])
+  subscription             Subscription? @relation(fields: [subscription_id], references: [id])
+
+  @@index([business_id])
+  @@index([plan_id])
+}
+
+
+
+model AiTrainingDocument {
+  id             Int      @id @default(autoincrement())
+  business_id    Int
+  uploaded_by    Int
+  original_name  String
+  file_path      String
+  file_type      String
+  file_size      Int?
+  category       String?
+  tags           Json?
+  status         String   @default("ACTIVE") // ACTIVE | DELETED
+
+  created_at     DateTime @default(now())
+  deleted_at     DateTime?
+
+  business       Business @relation(fields: [business_id], references: [id])
+  uploader       User     @relation(fields: [uploaded_by], references: [id])
+
+  @@index([business_id])
+  @@index([uploaded_by])
+}
+
+
+enum EmailFolder {
+  INBOX
+  SENT
+  DRAFT
+  TRASH
+  SPAM
+}
+
+enum EmailDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum ThreadStatus {
+  NEW
+  OPENED
+  REPLIED
+  WON
+  LOST
+}
+
+enum OpportunityStage {
+  LEAD
+  WON
+  LOST
+}
+
+enum AIActionType {
+  SUMMARY
+  REPLY_DRAFT
+  SENTIMENT
+  CLASSIFICATION
+  FOLLOWUP_SUGGESTION
+}
+
+enum IntegrationType {
+  GOOGLE
+  OUTLOOK
+  SMTP
+  OTHER
+}
+
+enum TrainingType {
+  TEXT
+  FILE
+  FAQ
+}
+
+enum HallucinationSeverity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum HallucinationStatus {
+  OPEN
+  FIXED
+  DISMISSED
+}

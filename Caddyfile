@@ -1,0 +1,3 @@
+site.xn--privestate-e7a.com {
+    reverse_proxy localhost:8800
+}

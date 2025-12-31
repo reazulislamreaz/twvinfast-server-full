@@ -1,0 +1,49 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: softvence/twvinfast-backend:latest
+    profiles:
+      - prod
+    container_name: twvinfast-backend
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - uploads:/app/uploads
+      - uploads-file:/app/uploads-file
+      - uploads-profile-images:/app/uploads-profile-images
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - twvinfast
+
+  db:
+    image: postgres:15
+    container_name: twvinfast_db
+    restart: always
+    profiles:
+      - prod
+      - dev
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - twvinfast_pgdata:/var/lib/postgresql/data
+    networks:
+      - twvinfast
+
+volumes:
+  twvinfast_pgdata:
+  twvinfast_redisdata:
+  uploads:
+  uploads-file:
+  uploads-profile-images:
+
+networks:
+  twvinfast:
+    driver: bridge

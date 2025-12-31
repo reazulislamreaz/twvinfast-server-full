@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket Test</title>
+  </head>
+  <body>
+    <h2>Socket.IO Test Page</h2>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io('http://localhost:8800', {
+        transports: ['websocket'],
+      });
+
+      socket.onAny((event, data) => {
+        console.log('📡 SOCKET EVENT:', event, data);
+      });
+
+      // join mailbox room
+      socket.emit('join', { mailboxId: 2 });
+    </script>
+  </body>
+</html>
+
+<!-- for console paste -->
+
+<!-- (() => {
+  const socket = io('http://localhost:8800', {
+    transports: ['websocket'],
+  });
+
+  socket.on('connect', () => {
+    console.log('✅ CONNECTED:', socket.id);
+  });
+
+  socket.onAny((event, data) => {
+    console.log('📡 SOCKET EVENT:', event, data);
+  });
+
+  // ✅ FIXED KEY NAME
+  socket.emit('join', { mailbox_id: 2 });
+})(); -->
