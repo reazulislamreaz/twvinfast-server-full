@@ -4,6 +4,8 @@
 
 **Replii** is a sophisticated, multi-tenant SaaS platform designed to revolutionize business communication. By integrating advanced AI capabilities directly into the email workflow, Replii enables businesses to automate responses, gain deep sentiment insights, and manage customer opportunities with unprecedented efficiency.
 
+[Features](#-features) • [Tech Stack](#-tech-stack) • [Architecture](#-architecture) • [Setup](#-setup--installation) • [API Documentation](#-api-documentation) • [Challenges](#-challenges)
+
 ---
 
 ## 🌐 Live Project Links
@@ -31,66 +33,60 @@ Whether it's generating a perfect reply in seconds, identifying a new sales oppo
 
 ---
 
-## 🚀 Key Features
+## ✨ Features
+
+### 🔐 Authentication & Security
+- **JWT Auth with Refresh Tokens:** Secure, stateless session management.
+- **Two-Factor Authentication (2FA):** Enhanced account protection using TOTP.
+- **Role-Based Access Control (RBAC):** Distinct permissions for SuperAdmins, Admins, and Users.
 
 ### 📧 Intelligent Email Management
-- **Unified Inbox:** Connect and manage multiple mailboxes (IMAP/SMTP) in one place.
-- **Smart Threading:** Automatically groups related messages into clean conversations.
-- **AI-Powered Replies:** Generate context-aware drafts with adjustable tones (Professional, Friendly, Urgent).
-- **Sentiment Analysis:** Real-time AI analysis of customer mood and intent.
+- **Unified Inbox:** Centralized management of multiple mailboxes via IMAP/SMTP.
+- **Smart Threading:** Intelligent grouping of messages using `Message-ID` and `References`.
+- **AI Generate & Reply:** Draft context-aware responses with tone control (Professional, Friendly, etc.).
+- **Sentiment Analysis:** Real-time analysis of customer intent and mood.
 
 ### 💼 CRM & Opportunity Tracking
-- **Lead Scoring:** AI-driven assessment of lead quality based on interaction history.
-- **Opportunity Pipeline:** Visual sales stages (Lead, Won, Lost) to track business growth.
-- **Customer 360:** A comprehensive view of every customer's emails, notes, and value.
-- **Knowledge Base:** Upload company documents to train the AI on your specific business rules.
+- **Lead Scoring:** Automated assessment of customer potential.
+- **Opportunity Pipeline:** Visual sales stages (Lead, Won, Lost).
+- **Customer 360:** Comprehensive interaction history and notes.
+- **Knowledge Registry:** Business document management for AI training.
 
-### 💳 Advanced Billing (Stripe)
-- **Subscription Tiers:** Support for Starter, Growth, and Pro plans.
-- **Automated Metering:** Real-time tracking of AI credits and user limits.
-- **Self-Service Portal:** Allow users to manage payment methods and invoices directly.
-
-### 🔐 Enterprise Security
-- **RBAC:** Fine-grained Role-Based Access Control (SuperAdmin, Admin, User).
-- **2FA:** Built-in Two-Factor Authentication for enhanced security.
-- **Data Isolation:** Strict multi-tenant architecture ensuring business data privacy.
+### 💳 Billing & Analytics
+- **Subscription Management:** Automated billing via Stripe (Starter, Growth, Pro).
+- **AI Credit System:** Granular tracking and enforcement of AI usage credits.
+- **Revenue Dashboard:** High-level financial reporting for SuperAdmins.
 
 ---
 
-## 👥 User Roles
+## 🛠️ Tech Stack
 
-| Role | Description |
-| :--- | :--- |
-| **SuperAdmin** | Platform owner. Monitors global revenue, manages plans, and oversees all businesses. |
-| **Admin** | Business owner. Manages team members, connects mailboxes, and handles billing. |
-| **User** | Team member. Interacts with customers, uses AI features, and manages leads. |
-
----
-
-## 🛠️ Technology Stack
-
-- **Backend:** NestJS (Node.js)
+- **Backend:** Node.js, NestJS, TypeScript
 - **Database:** PostgreSQL with Prisma ORM
-- **Real-time:** Socket.io
+- **Real-time:** Socket.io (WebSockets)
 - **AI Engine:** OpenAI GPT-4o
-- **Payments:** Stripe (Checkout, Billing Portal, Webhooks)
-- **Infrastructure:** Docker, Nginx/Caddy, Linux
+- **Payments:** Stripe (Checkout, Customer Portal, Webhooks)
+- **Authentication:** Passport.js (JWT), Speakeasy (2FA)
+- **Infrastructure:** Docker, Nginx/Caddy, Linux (DigitalOcean)
 
 ---
 
-## 🏗️ System Architecture
+## 🏗️ Architecture
 
-Replii follows a **Modular Monolith** architecture designed for high availability:
-1.  **Controller Layer:** Strict request validation and routing.
-2.  **Service Layer:** Core business logic, AI orchestration, and mail syncing.
-3.  **Real-time Gateway:** Instant event broadcasting for new emails and notifications.
-4.  **Integration Layer:** Specialized wrappers for Stripe, OpenAI, and IMAP/SMTP protocols.
+Replii utilizes a robust, service-oriented architecture designed for scalability and multi-tenancy:
+
+**Client → API (NestJS Controllers) → Service Layer → Data Access (Prisma) → Database (PostgreSQL)**
+
+- **Controller Layer:** Handles HTTP requests and ensures strict input validation.
+- **Service Layer:** Orchestrates core business logic, AI interactions, and mailbox syncing.
+- **Integration Layer:** specialized services for external APIs (Stripe, OpenAI).
+- **Real-time Gateway:** Manages WebSocket connections for instant frontend updates.
 
 ---
 
-## 🔄 Business Flow (How it Works)
+## 🔄 Business Flow
 
-1.  **Registration:** Admin signs up at [replii.ca](https://replii.ca) and creates a business profile.
+1.  **Onboarding:** Admin signs up at [replii.ca](https://replii.ca) and creates a business profile.
 2.  **Connection:** Admin connects a business email (Gmail/Outlook) via the dashboard.
 3.  **AI Training:** Company FAQs or documents are uploaded to the Knowledge Base.
 4.  **Interaction:** The team receives emails. AI suggests replies based on the Knowledge Base.
@@ -99,45 +95,66 @@ Replii follows a **Modular Monolith** architecture designed for high availabilit
 
 ---
 
-## 🚀 Setup & Installation
+## ⚙️ Setup & Installation
 
 ### Prerequisites
 - Node.js (v20+)
 - PostgreSQL
 - Stripe Account & OpenAI API Key
 
-### Installation
-```bash
-# 1. Clone
-git clone https://github.com/reazulislamreaz/twvinfast-server-full
-cd twvinfast-server-full
-
-# 2. Install
-npm install
-
-# 3. Configure
-cp .env.example .env
-# Edit .env with your credentials
-
-# 4. Migrate & Seed
-npx prisma migrate dev
-npm run prisma:seed
-
-# 5. Start
-npm run start:dev
-```
+### Installation Steps
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/reazulislamreaz/twvinfast-server-full
+    cd twvinfast-server-full
+    ```
+2.  **Install Dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Configure Environment:**
+    ```bash
+    cp .env.example .env
+    # Update .env with your specific API keys and DB credentials.
+    ```
+4.  **Database Migration & Seeding:**
+    ```bash
+    npx prisma migrate dev
+    npm run prisma:seed
+    ```
+5.  **Start Development Server:**
+    ```bash
+    npm run start:dev
+    ```
 
 ---
 
-## 🔑 Environment Variables
+## 📚 API Documentation
 
-| Variable | Description |
-| :--- | :--- |
-| `DATABASE_URL` | PostgreSQL connection string |
-| `JWT_ACCESS_SECRET` | Secret for Access Tokens |
-| `STRIPE_SECRET_KEY` | Stripe Secret Key |
-| `OPENAI_API_KEY` | OpenAI API Key |
-| `PORT` | API Port (default 8800) |
+Replii provides a comprehensive RESTful API for all platform functionalities.
+
+- **Base URL:** `https://api.replii.ca`
+- **Authentication:** JWT Bearer Token
+
+For a detailed breakdown of all available endpoints, request/response examples, and validation rules, please refer to our full documentation:
+
+👉 **[View Full API Documentation](./API_DOCUMENTATION.md)**
+
+---
+
+## 🧠 Challenges
+
+### 1. High-Performance Email Synchronization
+**Challenge:** Syncing thousands of emails across multiple concurrent IMAP connections without blocking the main event loop or hitting memory limits.
+**Solution:** Implemented a background worker pattern with efficient IMAP UID tracking and incremental syncing to minimize data transfer and processing overhead.
+
+### 2. AI Hallucination & Accuracy
+**Challenge:** Ensuring AI-generated replies remain grounded in the specific business's data and do not "hallucinate" incorrect information.
+**Solution:** Developed a strict RAG (Retrieval-Augmented Generation) pipeline that forces the AI to prioritize the Knowledge Base documents and implemented a "Hallucination Report" system for continuous manual improvement.
+
+### 3. Multi-tenant Data Isolation
+**Challenge:** Preventing any possibility of data leakage between different business accounts in a shared database environment.
+**Solution:** Utilized Prisma middleware and strict service-layer scoping to ensure every database query is automatically filtered by `business_id`, reinforced by strict RBAC guards.
 
 ---
 
