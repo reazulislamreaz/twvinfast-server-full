@@ -1,98 +1,153 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Replii - Enterprise AI-Powered Email & CRM Suite
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![Replii Logo](https://replii.ca/logo.png) <!-- Placeholder for actual logo -->
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+**Replii** is a sophisticated, multi-tenant SaaS platform designed to revolutionize business communication. By integrating advanced AI capabilities directly into the email workflow, Replii enables businesses to automate responses, gain deep sentiment insights, and manage customer opportunities with unprecedented efficiency.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🌐 Live Project Links
 
-## Project setup
+| Environment | URL |
+| :--- | :--- |
+| **Frontend (Live Site)** | [https://replii.ca](https://replii.ca) |
+| **Backend API Base** | [https://api.replii.ca](https://api.replii.ca) |
 
+---
+
+## 📖 Project Overview
+
+Replii is built for modern enterprises and high-growth teams that need more than just an email client. It acts as an **intelligent layer** over your communication channels, using AI to understand the context of every message, track sales leads, and provide data-driven insights. 
+
+Whether it's generating a perfect reply in seconds, identifying a new sales opportunity, or managing complex billing tiers, Replii provides a unified, professional dashboard for your entire team.
+
+---
+
+## 🚀 Key Features
+
+### 📧 Intelligent Email Management
+- **Unified Inbox:** Connect and manage multiple mailboxes (IMAP/SMTP) in one place.
+- **Smart Threading:** Automatically groups related messages into clean conversations.
+- **AI-Powered Replies:** Generate context-aware drafts with adjustable tones (Professional, Friendly, Urgent).
+- **Sentiment Analysis:** Real-time AI analysis of customer mood and intent.
+
+### 💼 CRM & Opportunity Tracking
+- **Lead Scoring:** AI-driven assessment of lead quality based on interaction history.
+- **Opportunity Pipeline:** Visual sales stages (Lead, Won, Lost) to track business growth.
+- **Customer 360:** A comprehensive view of every customer's emails, notes, and value.
+- **Knowledge Base:** Upload company documents to train the AI on your specific business rules.
+
+### 💳 Advanced Billing (Stripe)
+- **Subscription Tiers:** Support for Starter, Growth, and Pro plans.
+- **Automated Metering:** Real-time tracking of AI credits and user limits.
+- **Self-Service Portal:** Allow users to manage payment methods and invoices directly.
+
+### 🔐 Enterprise Security
+- **RBAC:** Fine-grained Role-Based Access Control (SuperAdmin, Admin, User).
+- **2FA:** Built-in Two-Factor Authentication for enhanced security.
+- **Data Isolation:** Strict multi-tenant architecture ensuring business data privacy.
+
+---
+
+## 👥 User Roles
+
+| Role | Description |
+| :--- | :--- |
+| **SuperAdmin** | Platform owner. Monitors global revenue, manages plans, and oversees all businesses. |
+| **Admin** | Business owner. Manages team members, connects mailboxes, and handles billing. |
+| **User** | Team member. Interacts with customers, uses AI features, and manages leads. |
+
+---
+
+## 🛠️ Technology Stack
+
+- **Backend:** NestJS (Node.js)
+- **Database:** PostgreSQL with Prisma ORM
+- **Real-time:** Socket.io
+- **AI Engine:** OpenAI GPT-4o
+- **Payments:** Stripe (Checkout, Billing Portal, Webhooks)
+- **Infrastructure:** Docker, Nginx/Caddy, Linux
+
+---
+
+## 🏗️ System Architecture
+
+Replii follows a **Modular Monolith** architecture designed for high availability:
+1.  **Controller Layer:** Strict request validation and routing.
+2.  **Service Layer:** Core business logic, AI orchestration, and mail syncing.
+3.  **Real-time Gateway:** Instant event broadcasting for new emails and notifications.
+4.  **Integration Layer:** Specialized wrappers for Stripe, OpenAI, and IMAP/SMTP protocols.
+
+---
+
+## 🔄 Business Flow (How it Works)
+
+1.  **Registration:** Admin signs up at [replii.ca](https://replii.ca) and creates a business profile.
+2.  **Connection:** Admin connects a business email (Gmail/Outlook) via the dashboard.
+3.  **AI Training:** Company FAQs or documents are uploaded to the Knowledge Base.
+4.  **Interaction:** The team receives emails. AI suggests replies based on the Knowledge Base.
+5.  **Conversion:** Threads are marked as "Won" or "Lost," feeding into the CRM analytics.
+6.  **Scaling:** As the business grows, the Admin upgrades the plan via the Stripe portal.
+
+---
+
+## 🚀 Setup & Installation
+
+### Prerequisites
+- Node.js (v20+)
+- PostgreSQL
+- Stripe Account & OpenAI API Key
+
+### Installation
 ```bash
-$ npm install
+# 1. Clone
+git clone https://github.com/reazulislamreaz/twvinfast-server-full
+cd twvinfast-server-full
+
+# 2. Install
+npm install
+
+# 3. Configure
+cp .env.example .env
+# Edit .env with your credentials
+
+# 4. Migrate & Seed
+npx prisma migrate dev
+npm run prisma:seed
+
+# 5. Start
+npm run start:dev
 ```
 
-## Compile and run the project
+---
 
+## 🔑 Environment Variables
+
+| Variable | Description |
+| :--- | :--- |
+| `DATABASE_URL` | PostgreSQL connection string |
+| `JWT_ACCESS_SECRET` | Secret for Access Tokens |
+| `STRIPE_SECRET_KEY` | Stripe Secret Key |
+| `OPENAI_API_KEY` | OpenAI API Key |
+| `PORT` | API Port (default 8800) |
+
+---
+
+## 🛡️ Security Features
+- **Stateless Auth:** Secure JWT with refresh token rotation.
+- **Encryption:** Bcrypt password hashing and encrypted mail credentials.
+- **Validation:** Strict `class-validator` schemas for all API inputs.
+
+---
+
+## 🚢 Deployment
+Deployable via Docker to any cloud provider (AWS, DigitalOcean, Heroku).
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+docker-compose up --build -d
 ```
 
-## Run tests
+---
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## 👤 Author & Contact
+**Replii Engineering Team**  
+Support: [support@replii.ca]
