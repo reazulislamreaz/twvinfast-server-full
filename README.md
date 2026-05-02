@@ -1,6 +1,6 @@
 # Replii - Enterprise AI-Powered Email & CRM Suite
 
-![Replii Logo](https://replii.ca/logo.png) <!-- Placeholder for actual logo -->
+![Replii Logo](https://i.postimg.cc/k4fQ3bZ7/Screenshot-from-2026-05-02-10-33-04.png) 
 
 **Replii** is a sophisticated, multi-tenant SaaS platform designed to revolutionize business communication. By integrating advanced AI capabilities directly into the email workflow, Replii enables businesses to automate responses, gain deep sentiment insights, and manage customer opportunities with unprecedented efficiency.
 
