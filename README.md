@@ -19,7 +19,7 @@
 
 Explore the complete UI/UX design and wireframes of the Replii (AI Email Assistant) platform on Figma:
 
-👉 [View Figma Design](https://www.figma.com/design/T5qG4wnfCp4JLNigU8fYDw/twvinfast-%7C%7C-bits_wise_Fiverr-%7C%7C-FO2D7220A442?node-id=9694-1363&p=f&t=nwOvOLsYZ5C0J8ms-0)
+👉 [View Figma Design](https://www.figma.com/design/T5qG4wnfCp4JLNigU8fYDw/twvinfast-%7C%7C-bits_wise_Fiverr-%7C%7C-FO2D7220A442?node-id=34883-2459&p=f&t=nwOvOLsYZ5C0J8ms-0)
 
 ---
 
