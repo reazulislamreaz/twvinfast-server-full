@@ -1,6 +1,6 @@
 # Replii - Enterprise AI-Powered Email & CRM Suite
 
-![Replii Logo](https://i.postimg.cc/k4fQ3bZ7/Screenshot-from-2026-05-02-10-33-04.png) 
+![Replii Login Page](https://i.postimg.cc/k4fQ3bZ7/Screenshot-from-2026-05-02-10-33-04.png) 
 
 **Replii** is a sophisticated, multi-tenant SaaS platform designed to revolutionize business communication. By integrating advanced AI capabilities directly into the email workflow, Replii enables businesses to automate responses, gain deep sentiment insights, and manage customer opportunities with unprecedented efficiency.
 
@@ -12,6 +12,14 @@
 | :--- | :--- |
 | **Frontend (Live Site)** | [https://replii.ca](https://replii.ca) |
 | **Backend API Base** | [https://api.replii.ca](https://api.replii.ca) |
+
+---
+
+## 🎨 Design & UI/UX Preview
+
+Explore the complete UI/UX design and wireframes of the Replii (AI Email Assistant) platform on Figma:
+
+👉 [View Figma Design](https://www.figma.com/design/T5qG4wnfCp4JLNigU8fYDw/twvinfast-%7C%7C-bits_wise_Fiverr-%7C%7C-FO2D7220A442?node-id=9694-1363&p=f&t=nwOvOLsYZ5C0J8ms-0)
 
 ---
 
